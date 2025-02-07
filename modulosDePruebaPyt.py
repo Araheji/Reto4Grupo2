@@ -1,9 +1,9 @@
 import speech_recognition as sr
-import gtts as gTTS
+import gtts
 import os
-from jetbot import Robot
+# from jetbot import Robot
 
-robot = Robot()
+# robot = Robot()
 
 # Función para reconocer lo que dices desde un archivo de audio
 def reconocer_voz_desde_archivo(archivo_audio):
@@ -22,7 +22,7 @@ def reconocer_voz_desde_archivo(archivo_audio):
 
 # Función para convertir texto en voz (respuesta del robot)
 def hablar(texto):
-    tts = gTTS.gTTS(texto, lang='es')
+    tts = gtts.gTTS(texto, lang='es')
     tts.save("respuesta.mp3")
     os.system("mpg321 respuesta.mp3")  # Reproducir el audio generado
 
@@ -30,27 +30,33 @@ def hablar(texto):
 def controlar_robot(comando):
     if "avanzar" in comando:
         print("El robot avanza")
-        robot.forward()  # Avanza
+        # robot.forward()  # Avanza
         hablar("Voy hacia adelante")
+        return "avanzar"
     elif "detener" in comando:
         print("El robot se detiene")
-        robot.stop()  # Detiene el robot
+        # robot.stop()  # Detiene el robot
         hablar("Me detengo")
+        return "detener"
     elif "retroceder" in comando:
         print("El robot retrocede")
-        robot.backward()  # Retrocede
+        # robot.backward()  # Retrocede
         hablar("Voy hacia atrás")
+        return "retroceder"
     elif "izquierda" in comando:
         print("El robot gira a la izquierda")
-        robot.left()  # Gira a la izquierda
+        # robot.left()  # Gira a la izquierda
         hablar("Voy a la izquierda")
+        return "izquierda"
     elif "derecha" in comando:
         print("El robot gira a la derecha")
-        robot.right()  # Gira a la derecha
+        # robot.right()  # Gira a la derecha
         hablar("Voy a la derecha")
+        return "derecha"
     else:
         print("Comando no reconocido")
         hablar("No entiendo el comando")
+        return "comando_no_reconocido"
 
 # Lista de archivos de audio a probar
 archivos_audio = ["Detener.wav", "Avanzar.wav"]  # Asegúrate de tener estos archivos en la misma carpeta
@@ -60,7 +66,8 @@ def main():
     for archivo_audio in archivos_audio:
         comando = reconocer_voz_desde_archivo(archivo_audio)  # Procesar el archivo de audio
         if comando:
-            controlar_robot(comando)
+            accion = controlar_robot(comando)
+            print(f"Acción realizada: {accion}")
 
 if __name__ == "__main__":
     main()
